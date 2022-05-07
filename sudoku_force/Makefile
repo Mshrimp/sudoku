@@ -1,7 +1,13 @@
+
 all:
-	gcc -c sudoku.c -o sudoku.o
-	gcc -o sudoku sudoku.o
+	-@mkdir build
+	gcc -c sudoku_common.c -o sudoku_common.o
+	gcc -c sudoku_solve_1.c -o sudoku_solve_1.o
+	gcc -c main.c -o main.o
+	gcc -o sudoku sudoku_common.o sudoku_solve_1.o main.o
+	-@ mv *.o build/
 
 clean:
-	-@rm *.o -rf
+	-@rm build/*.o -rf
+	-@rm build -rf
 	-@rm sudoku -rf
