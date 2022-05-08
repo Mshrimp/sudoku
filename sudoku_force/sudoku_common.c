@@ -366,7 +366,9 @@ int fill_in_box_row_by_num(char box[][3], int row, int num)
 	int i = 0;
 
 	for (i = 0; i < 3; i++) {
-		box[row][i] = num;
+		if (box[row][i] == 0) {
+			box[row][i] = num;
+		}
 	}
 
 	return 0;
@@ -377,7 +379,9 @@ int fill_in_box_col_by_num(char box[][3], int col, int num)
 	int i = 0;
 
 	for (i = 0; i < 3; i++) {
-		box[i][col] = num;
+		if (box[i][col] == 0) {
+			box[i][col] = num;
+		}
 	}
 
 	return 0;
@@ -390,7 +394,9 @@ int fill_in_box_by_num(char box[][3], int num)
 
 	for (i = 0; i < 3; i++) {
 		for (j = 0; j < 3; j++) {
-			box[i][j] = num;
+			if (box[i][j] == 0) {
+				box[i][j] = num;
+			}
 		}
 	}
 
@@ -451,7 +457,11 @@ int box_3_3_show(char box[][3])
 		if ((i != 0) && (i % 3 == 0)) {
 			printf("\n");
 		}
-		printf(" %d", box[i/3][i%3]);
+		if (box[i/3][i%3] == '*') {
+			printf(" %c", box[i/3][i%3]);
+		} else {
+			printf(" %d", box[i/3][i%3]);
+		}
 	}
 	printf("\n");
 	printf("--------\n");
@@ -459,3 +469,144 @@ int box_3_3_show(char box[][3])
 	return 0;
 }
 
+int is_box_empty_num_in_common_row(int box, int *common_row)
+{
+	int box_start_row = 0;
+	int box_start_col = 0;
+	int row_arr[3] = { -1 };
+	int ind = 0;
+	int row_ind = 0;
+	int row_bak = -1;
+	int i = 0;
+
+	get_box_start_row_col(box, &box_start_row, &box_start_col);
+
+	for (ind = 0; ind < 9; ind++) {
+		if (sudoku[box_start_row+ind/3][box_start_col+ind%3][0] != 0) {
+			continue;
+		}
+		row_arr[row_ind] = box_start_row + ind/3;
+		row_ind++;
+		if (row_ind >= 3) {
+			break;
+		}
+	}
+#if 0
+	printf("%s, box: %d, row_arr:", __func__, box);
+	for (i = 0; i < 3; i++) {
+		printf(" %d", row_arr[i]);
+	}
+	printf("\n");
+#endif
+	for (ind = 0; ind < row_ind; ind++) {
+		if ((row_bak >= 0) && (row_bak != row_arr[ind])) {
+			*common_row = -1;
+			return 0;
+		}
+		row_bak = row_arr[ind];
+	}
+	*common_row = row_bak;
+	//printf("%s, common row\n", __func__);
+
+	return 1;
+}
+
+int is_box_empty_num_in_common_col(int box, int *common_col)
+{
+	int box_start_row = 0;
+	int box_start_col = 0;
+	int col_arr[3] = { -1 };
+	int ind = 0;
+	int col_ind = 0;
+	int col_bak = -1;
+	int i = 0;
+
+	get_box_start_row_col(box, &box_start_row, &box_start_col);
+
+	for (ind = 0; ind < 9; ind++) {
+		if (sudoku[box_start_row+ind/3][box_start_col+ind%3][0] != 0) {
+			continue;
+		}
+		col_arr[col_ind] = box_start_col + ind%3;
+		col_ind++;
+		if (col_ind >= 3) {
+			break;
+		}
+	}
+#if 0
+	printf("%s, box: %d, col_arr:", __func__, box);
+	for (i = 0; i < 3; i++) {
+		printf(" %d", col_arr[i]);
+	}
+	printf("\n");
+#endif
+	for (ind = 0; ind < col_ind; ind++) {
+		if ((col_bak >= 0) && (col_bak != col_arr[ind])) {
+			*common_col = -1;
+			return 0;
+		}
+		col_bak = col_arr[ind];
+	}
+	*common_col = col_bak;
+	//printf("%s, common col\n", __func__);
+
+	return 1;
+}
+
+int box_3_3_3_show_in_row(char box_arrs[][3][3])
+{
+	int row_ind = 0;
+	int col_ind = 0;
+
+	printf("box 3x3x3 show:\n");
+	printf("-------------------------\n");
+	for (row_ind = 0; row_ind < 3; row_ind++) {
+		for (col_ind = 0; col_ind < SUDOKU_COL; col_ind++) {
+			if (col_ind % 3 == 0) {
+				if (col_ind != 0) {
+					printf(" ");
+				}
+				printf("|");
+			}
+			if (box_arrs[col_ind/3][row_ind][col_ind%3] == '*') {
+				printf(" %c", box_arrs[col_ind/3][row_ind][col_ind%3]);
+			} else {
+				printf(" %d", box_arrs[col_ind/3][row_ind][col_ind%3]);
+			}
+		}
+		printf(" |\n");
+	}
+	printf("-------------------------\n");
+
+	return 0;
+}
+
+int box_3_3_3_show_in_col(char box_arrs[][3][3])
+{
+	int row_ind = 0;
+	int col_ind = 0;
+
+	printf("box 3x3x3 show:\n");
+	printf("---------\n");
+	for (row_ind = 0; row_ind < SUDOKU_ROW; row_ind++) {
+		if (row_ind % 3 == 0) {
+			if (row_ind != 0) {
+				printf("---------\n");
+			}
+		}
+		for (col_ind = 0; col_ind < 3; col_ind++) {
+			if (col_ind == 0) {
+				printf("|");
+			}
+			if (box_arrs[row_ind/3][row_ind%3][col_ind] == '*') {
+				printf(" %c", box_arrs[row_ind/3][row_ind%3][col_ind]);
+			} else {
+				printf(" %d", box_arrs[row_ind/3][row_ind%3][col_ind]);
+			}
+		}
+		printf(" |\n");
+	}
+	printf("---------\n");
+
+	return 0;
+}

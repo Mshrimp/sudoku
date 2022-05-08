@@ -24,17 +24,13 @@ int main(int argc, char *argv[])
 	sudoku_data_init();
 
 	printf("Init sudoku data:\n");
-    sudoku_show();
+	sudoku_show();
 
-	for (i = 0; i < 1; i++) {
+	for (i = 0; ; i++) {
 		sudoku_solve_1();
-	}
-
-	for (i = 0; i < 1; i++) {
 		sudoku_solve_2();
+		sudoku_solve_3();
 	}
-
-	printf("Total test count: %d\n", i);
 
     return 0;
 }

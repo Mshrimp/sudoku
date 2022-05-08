@@ -42,5 +42,11 @@ int get_box_3_3_num_count(char box[][3]);
 int get_box_3_3_empty_count(char box[][3]);
 int box_3_3_show(char box[][3]);
 
+int box_3_3_3_show_in_row(char box_arrs[][3][3]);
+int box_3_3_3_show_in_col(char box_arrs[][3][3]);
+
+int is_box_empty_num_in_common_row(int box, int *common_row);
+int is_box_empty_num_in_common_col(int box, int *common_col);
+
 #endif
 

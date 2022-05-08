@@ -55,7 +55,7 @@ int num_fill_in_box(int box, int num)
 	return 0;
 }
 
-int try_to_fill_num_in_box(void)
+int try_to_fill_num_in_box_by_row_col(void)
 {
 	int num_ind = 0;
 	int box_ind = 0;
@@ -82,8 +82,8 @@ int sudoku_solve_2(void)
 
 	count_init = sudoku_data_count();
 
-	for (i = 0; i < 100; i++) {
-		try_to_fill_num_in_box();
+	for (i = 0; ; i++) {
+		try_to_fill_num_in_box_by_row_col();
 
 		printf("Check sudoku 2 data %d times:\n", i+1);
 		sudoku_show();
@@ -93,6 +93,7 @@ int sudoku_solve_2(void)
 			break;
 		}
 		count_bak = count;
+		printf("Sudoku 2 total data count: %d\n", count);
 	}
 
     return 0;
