@@ -30,6 +30,9 @@ int main(int argc, char *argv[])
 		sudoku_solve_1();
 	}
 
+	for (i = 0; i < 1; i++) {
+		sudoku_solve_2();
+	}
 
 	printf("Total test count: %d\n", i);
 

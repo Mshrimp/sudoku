@@ -4,4 +4,7 @@
 int sudoku_check_all_data(void);
 int sudoku_solve_1(void);
 
+
+int sudoku_solve_2(void);
+
 #endif

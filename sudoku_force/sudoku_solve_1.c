@@ -5,10 +5,6 @@
 #include "sudoku_common.h"
 #include "sudoku_solve.h"
 
-#define SUDOKU_ROW      (9)
-#define SUDOKU_COL      (9)
-#define SUDOKU_BOX      (9)
-
 int sudoku_check_all_data(void)
 {
 	int i = 0;
@@ -56,7 +52,7 @@ int sudoku_solve_1(void)
 	int i = 0;
 	int ret = -1;
 
-	sudoku_data_count(&count_init);
+	count_init = sudoku_data_count();
 
 	for (i = 0; i < 100; i++) {
 		sudoku_check_all_data();
@@ -64,7 +60,7 @@ int sudoku_solve_1(void)
 		printf("Check sudoku data %d times:\n", i+1);
 		sudoku_show();
 
-		sudoku_data_count(&count);
+		count = sudoku_data_count();
 		if ((count == 81) || (count == count_init) || (count == count_bak)) {
 			break;
 		}

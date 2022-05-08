@@ -92,6 +92,23 @@ int sudoku_show(void)
     return 0;
 }
 
+int get_box_by_row_col(int row, int col)
+{
+	int box = 0;
+
+	box = row / 3 * 3 + col / 3;
+
+	return box;
+}
+
+int get_box_start_row_col(int box, int *row, int *col)
+{
+	*row = box / 3 * 3;
+	*col = box % 3 * 3;
+
+	return 0;
+}
+
 int sudoku_row_check(int row, char num)
 {
 	int i = 0;
@@ -190,7 +207,7 @@ int sudoku_data_init(void)
 	return 0;
 }
 
-int sudoku_data_count(int *cnt)
+int sudoku_data_count(void)
 {
 	int i = 0;
 	int j = 0;
@@ -205,7 +222,239 @@ int sudoku_data_count(int *cnt)
 			}
 		}
 	}
-	*cnt = count;
+
+	return count;
+}
+
+int is_num_in_row(int row, int num)
+{
+	int i = 0;
+
+	for (i = 0; i < SUDOKU_COL; i++) {
+		if (sudoku[row][i][0] == num) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int is_num_in_col(int col, int num)
+{
+	int i = 0;
+
+	for (i = 0; i < SUDOKU_ROW; i++) {
+		if (sudoku[i][col][0] == num) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int is_num_in_box(int box, int num)
+{
+	int box_start_row = 0;
+	int box_start_col = 0;
+	int i = 0;
+
+	get_box_start_row_col(box, &box_start_row, &box_start_col);
+
+	for (i = 0; i < 9; i++) {
+		if (sudoku[box_start_row+i/3][box_start_col+i%3][0] == num) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+int get_row_num_count(int row)
+{
+	int count = 0;
+	int i = 0;
+
+	for (i = 0; i < SUDOKU_COL; i++) {
+		if (sudoku[row][i][0] != 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int get_row_empty_count(int row)
+{
+	int count = 0;
+	int i = 0;
+
+	for (i = 0; i < SUDOKU_COL; i++) {
+		if (sudoku[row][i][0] == 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int get_col_num_count(int col)
+{
+	int count = 0;
+	int i = 0;
+
+	for (i = 0; i < SUDOKU_ROW; i++) {
+		if (sudoku[i][col][0] != 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int get_col_empty_count(int col)
+{
+	int count = 0;
+	int i = 0;
+
+	for (i = 0; i < SUDOKU_ROW; i++) {
+		if (sudoku[i][col][0] == 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int get_box_num_count(int box)
+{
+	int box_start_row = 0;
+	int box_start_col = 0;
+	int count = 0;
+	int i = 0;
+
+	get_box_start_row_col(box, &box_start_row, &box_start_col);
+
+	for (i = 0; i < 9; i++) {
+		if (sudoku[box_start_row+i/3][box_start_col+i%3][0] != 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int get_box_empty_count(int box)
+{
+	int box_start_row = 0;
+	int box_start_col = 0;
+	int count = 0;
+	int i = 0;
+
+	get_box_start_row_col(box, &box_start_row, &box_start_col);
+
+	for (i = 0; i < 9; i++) {
+		if (sudoku[box_start_row+i/3][box_start_col+i%3][0] == 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int fill_in_box_row_by_num(char box[][3], int row, int num)
+{
+	int i = 0;
+
+	for (i = 0; i < 3; i++) {
+		box[row][i] = num;
+	}
+
+	return 0;
+}
+
+int fill_in_box_col_by_num(char box[][3], int col, int num)
+{
+	int i = 0;
+
+	for (i = 0; i < 3; i++) {
+		box[i][col] = num;
+	}
+
+	return 0;
+}
+
+int fill_in_box_by_num(char box[][3], int num)
+{
+	int i = 0;
+	int j = 0;
+
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			box[i][j] = num;
+		}
+	}
+
+	return 0;
+}
+
+int fill_num_in_sudoku_row_col(int row, int col, int num)
+{
+	int ind = 0;
+
+	sudoku[row][col][0] = num;
+	sudoku[row][col][1] = 1;
+
+	for (ind = 0; ind < 9; ind++) {
+		if (sudoku[row][col][ind+2] != num) {
+			sudoku[row][col][ind+2] = 0;
+		}
+	}
+
+	return 0;
+}
+
+int get_box_3_3_num_count(char box[][3])
+{
+	int count = 0;
+	int i = 0;
+
+	for (i = 0; i < 9; i++) {
+		if (box[i/3][i%3] != 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int get_box_3_3_empty_count(char box[][3])
+{
+	int count = 0;
+	int i = 0;
+
+	for (i = 0; i < 9; i++) {
+		if (box[i/3][i%3] == 0) {
+			count++;
+		}
+	}
+
+	return count;
+}
+
+int box_3_3_show(char box[][3])
+{
+	int i = 0;
+
+	printf("box show:\n");
+	printf("--------\n");
+	for (i = 0; i < 9; i++) {
+		if ((i != 0) && (i % 3 == 0)) {
+			printf("\n");
+		}
+		printf(" %d", box[i/3][i%3]);
+	}
+	printf("\n");
+	printf("--------\n");
 
 	return 0;
 }
