@@ -253,7 +253,7 @@ int try_to_fill_two_or_three_num_in_box(void)
 	return 0;
 }
 
-int sudoku_solve_3(void)
+int sudoku_solve_3(int *times)
 {
 	int count_init = 0;
 	int count = 0;
@@ -266,14 +266,16 @@ int sudoku_solve_3(void)
 	for (i = 0; ; i++) {
 		try_to_fill_two_or_three_num_in_box();
 
-		printf("Check sudoku 3 data %d times:\n", i+1);
-		sudoku_show();
-
 		count = sudoku_data_count();
 		if ((count == 81) || (count == count_init) || (count == count_bak)) {
 			break;
 		}
 		count_bak = count;
+
+		(*times)++;
+		printf("Check sudoku 3 data times: %d\n", *times);
+
+		sudoku_show();
 		printf("Sudoku 3 total data count: %d\n", count);
 	}
 

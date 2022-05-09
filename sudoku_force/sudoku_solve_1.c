@@ -44,7 +44,7 @@ int sudoku_check_all_data(void)
 	return 0;
 }
 
-int sudoku_solve_1(void)
+int sudoku_solve_1(int *times)
 {
 	int count_init = 0;
 	int count = 0;
@@ -57,14 +57,16 @@ int sudoku_solve_1(void)
 	for (i = 0; ; i++) {
 		sudoku_check_all_data();
 
-		printf("Check sudoku data %d times:\n", i+1);
-		sudoku_show();
-
 		count = sudoku_data_count();
 		if ((count == 81) || (count == count_init) || (count == count_bak)) {
 			break;
 		}
 		count_bak = count;
+
+		(*times)++;
+		printf("Check sudoku data times: %d\n", *times);
+		sudoku_show();
+
 		printf("Sudoku total data count: %d\n", count);
 	}
 

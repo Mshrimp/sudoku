@@ -7,6 +7,9 @@
 
 int main(int argc, char *argv[])
 {
+	int count = 0;
+	int count_bak = 0;
+	int times = 0;
 	int i = 0;
 	int ret = -1;
 
@@ -27,10 +30,20 @@ int main(int argc, char *argv[])
 	sudoku_show();
 
 	for (i = 0; ; i++) {
-		sudoku_solve_1();
-		sudoku_solve_2();
-		sudoku_solve_3();
+		sudoku_solve_1(&times);
+		sudoku_solve_2(&times);
+		sudoku_solve_3(&times);
+
+		count = sudoku_data_count();
+
+		if (count == count_bak) {
+			sudoku_show();
+			break;
+		}
+		count_bak = count;
 	}
+
+	sudoku_solve_backtracking(&times);
 
     return 0;
 }
